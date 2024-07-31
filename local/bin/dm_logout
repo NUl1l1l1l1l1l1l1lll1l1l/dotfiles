@@ -1,0 +1,9 @@
+#!/bin/sh
+
+case $(echo "halt\nreboot" | dmenu -g 1) in
+  "halt")
+   /sbin/shutdown -h 0 ;;
+
+  "reboot")
+   /sbin/shutdown -r 0 ;;
+esac

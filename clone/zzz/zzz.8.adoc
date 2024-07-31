@@ -1,0 +1,119 @@
+= zzz(8)
+:doctype: manpage
+:repo-uri: https://github.com/jirutka/zzz
+:issues-uri: {repo-uri}/issues
+
+== NAME
+
+zzz, ZZZ - suspend or hibernate your computer
+
+
+== SYNOPSIS
+
+*zzz* [-v] [-n|s|S|z|Z|H|R|V|h] +
+*ZZZ* [-v] [-n|s|S|z|Z|H|R|V|h]
+
+
+== DESCRIPTION
+
+*zzz* is a simple program to suspend or hibernate your computer.
+It supports hooks before and after suspending.
+
+
+== OPTIONS
+
+*-n*::
+Dry-run mode.
+Instead of performing an ACPI action, *zzz* will just sleep for a few seconds.
+
+*-s*, *-S*::
+Enter low-power idle mode (ACPI S1, kernel name "`freeze`").
+
+*-z*::
+Enter suspend to RAM mode (ACPI S3, kernel name "`mem`").
+This is the default for *zzz*.
+
+*-Z*::
+Enter hibernate to disk mode (ACPI S4, kernel name "`disk`") and power off.
+This is the default for *ZZZ*.
+
+*-H*::
+Enter hibernate to disk mode and suspend.
+This is also know as suspend-hybrid.
+
+*-R*::
+Enter hibernate to disk mode and reboot.
+This can be used to switch operating systems.
+
+*-v*::
+Be verbose.
+
+*-V*::
+Print program name & version and exit.
+
+*-h*::
+Print help message and exit.
+
+
+== FILES
+
+/etc/zzz.d/*::
+Hook scripts found in this directory are executed before/after the system is suspended/resumed by *zzz*.
+
+/etc/zzz.d/suspend/*::
+Hook scripts found in this directory are executed before the system is suspended by *zzz*.
+This directory is supported for compatibility with `zzz(8)` on Void Linux.
+
+/etc/zzz.d/resume/*::
+Hook scripts found in this directory are executed after the system is resumed.
+This directory is supported for compatibility with `zzz(8)` on Void Linux.
+
+The hook script is a regular file (or a symlink) owned by root, executable by the owner and not writeable by others.
+Any other files found in the aforesaid directories are ignored.
+
+The hook scripts are executed sequentially in alphabetic order with two arguments:
+
+. "`pre`" (before suspend), or "`post`" (after resume),
+. the same as *ZZZ_MODE* (see below).
+
+And the following environment variables:
+
+ZZZ_MODE::
+The selected suspend mode; one of "`hibernate`", "`noop`", "`standby`", or "`suspend`".
+
+ZZZ_HIBERNATE_MODE::
+The selected hibernate mode: "`platform`", "`reboot`", or "`suspend`".
+
+
+== EXIT CODES
+
+* *0* -- Clean exit, no error has encountered.
+* *1* -- General error.
+* *10* -- Invalid usage.
+* *11* -- The requested sleep state or hibernation mode is not supported or you don`'t have insufficient privileges.
+* *12* -- Unable to obtain lock; another instance of *zzz* is running.
+* *20* -- Failed to put system to sleep.
+* *21* -- Some hook script exited with a non-zero code. Note that *zzz* does not stop when a hook script fails.
+
+
+== LOGGING
+
+Information and debug messages are printed to STDOUT, error messages are printed to STDERR.
+All messages are also logged to syslog with ident string "`zzz`" and facility code 1 (user).
+
+Debug messages are not printed and logged unless *-v* is specified.
+
+
+== HISTORY
+
+This program is inspired from *zzz(8)* script in Void Linux written by Leah Neukirchen.
+
+
+== AUTHORS
+
+Jakub Jirutka
+
+
+== REPORTING BUGS
+
+Report bugs to the project`'s issue tracker at {issues-uri}.

@@ -1,0 +1,96 @@
+= Zzz…
+:proj-name: zzz
+:version: 0.1.1
+:gh-name: jirutka/{proj-name}
+:repology-name: zzz-jirutka
+:releases-uri: https://github.com/{gh-name}/releases/download/v{version}
+
+ifdef::env-github[]
+image:https://github.com/{gh-name}/workflows/CI/badge.svg[Binaries Workflow, link=https://github.com/{gh-name}/actions?query=workflow%3A%22CI%22]
+image:https://repology.org/badge/tiny-repos/{repology-name}.svg[Packaging status, link=https://repology.org/project/{repology-name}]
+endif::env-github[]
+
+A simple program to suspend or hibernate your computer.
+It supports hooks before and after suspending.
+
+Refer to link:zzz.8.adoc[zzz(8)] for usage information.
+
+
+== Requirements
+
+.*Runtime*:
+* Linux system with `/sys/power/state` and optionally `/sys/power/disk`
+
+.*Build*:
+* C compiler and linker supporting at least C99 (tested with clang and gcc)
+* https://www.gnu.org/software/make/[GNU Make]
+* http://asciidoctor.org/[Asciidoctor] (for building man pages)
+
+
+== Installation
+
+=== On Alpine Linux
+
+Install package https://pkgs.alpinelinux.org/packages?name={proj-name}[{proj-name}] on Alpine Linux v3.15 or later:
+
+[source, sh, subs="+attributes"]
+apk add {proj-name}
+
+
+=== On Arch Linux
+
+Install package https://aur.archlinux.org/packages/{proj-name}[{proj-name}] from AUR:
+
+[source, sh, subs="+attributes"]
+yay -S {proj-name}
+
+Or use another AUR helper.
+
+
+=== Using Pre-Built Binary
+
+{releases-uri}/{proj-name}-{version}-x86_64-unknown-linux.tar.gz[[x86_64]]
+{releases-uri}/{proj-name}-{version}-aarch64-unknown-linux.tar.gz[[aarch64]]
+{releases-uri}/{proj-name}-{version}-armv7-unknown-linux.tar.gz[[armv7]]
+{releases-uri}/{proj-name}-{version}-ppc64le-unknown-linux.tar.gz[[ppc64le]]
+{releases-uri}/{proj-name}-{version}-riscv64-unknown-linux.tar.gz[[riscv64]]
+
+. Download and extract release tarball for your CPU architecture (pick the right link from the list above):
++
+[source, sh, subs="verbatim, attributes"]
+----
+curl -sSLO {releases-uri}/{proj-name}-{version}-x86_64-unknown-linux.tar.gz
+curl -sSL {releases-uri}/checksums.txt | sha256sum -c --ignore-missing
+tar -xzf {proj-name}-{version}-*.tar.gz
+----
+
+. Install `{proj-name}` somewhere on your `PATH`, e.g. `/usr/local/bin`:
++
+[source, sh, subs="verbatim, attributes"]
+install -m 755 {proj-name}-{version}-*/{proj-name} /usr/local/bin/
+
+All binaries are statically linked with http://www.musl-libc.org/[musl libc], so they work on every Linux system (distro) regardless of used libc.
+
+
+=== From Source Tarball
+
+[source, sh, subs="+attributes"]
+----
+wget https://github.com/{gh-name}/archive/v{version}/{proj-name}-{version}.tar.gz
+tar -xzf {proj-name}-{version}.tar.gz
+cd {proj-name}-{version}
+
+make build
+make install DESTDIR=/ prefix=/usr/local
+----
+
+
+== Credits
+
+This program is inspired from https://man.voidlinux.org/zzz.8[zzz(8)] (https://github.com/void-linux/void-runit/blob/master/zzz[source]) in Void Linux written by Leah Neukirchen.
+
+
+== License
+
+This project is licensed under http://opensource.org/licenses/MIT/[MIT License].
+For the full text of the license, see the link:LICENSE[LICENSE] file.
