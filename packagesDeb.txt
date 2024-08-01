@@ -8,7 +8,6 @@ curl
 git
 wget
 htop
-neovim
 fzf
 dunst
 sxiv
@@ -22,3 +21,12 @@ unzip
 xwallpaper
 zenity
 lxappearance
+libx11-dev
+libxft-dev
+libharfbuzz-dev
+libxrandr-dev
+libimlib2-dev
+links
+xinit
+cmake
+gettext
